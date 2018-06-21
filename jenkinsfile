@@ -1,4 +1,4 @@
-podTemplate(label: 'java',
+podTemplate(label: 'java', 
     containers: [containerTemplate(name: 'maven', image: 'maven:3.5.3-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat',
         envVars: [containerEnvVar(key: 'DOCKER_CONFIG', value: '/tmp/'),])],
@@ -10,19 +10,19 @@ podTemplate(label: 'java',
     def DOCKER_IMAGE_NAME = 'app-pg'
     node ('java') {
         stage 'Checkout source code'
-        git 'http://fujie:1qazxsw2@hardening-gitlab-1788101581.cn-north-1.elb.amazonaws.com.cn/testing/cicdink8s.git'
-
+        git 'https://github.com/jasondi/spring-boot-test.git'
+        
         container('maven') {
           stage 'Build application'
-          //sh ("mvn package")
+          sh ("mvn package")
         }
-
+        
         container('docker') {
           stage 'Build docker image'
-          //sh ("docker build -t ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} .")
-
+          sh ("docker build -t ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} .")
+          
           stage 'push docker image to docker hub'
-          //sh ("docker push ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+          sh ("docker push ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
         }
     }
 }
