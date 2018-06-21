@@ -10,8 +10,8 @@ podTemplate(label: 'java',
     def DOCKER_IMAGE_NAME = 'app-pg'
     node ('java') {
         stage 'Checkout source code'
-        git 'https://github.com/jasondi/spring-boot-test.git'
-        
+        //git 'https://github.com/jasondi/spring-boot-test.git'
+        checkout scm
         container('maven') {
           stage 'Build application'
           sh ("mvn package")
